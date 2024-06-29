@@ -36,13 +36,55 @@ def handle_hello2():
     return jsonify(response_body), 200
 
 
+@api.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return jsonify([user.serialize() for user in users]), 200
+
+@api.route('/users/<int:user_id>', methods=['GET'])
+
+def get_user_by_id(user_id):
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({"message": "User not found"}), 404
+    return jsonify(user.serialize()), 200
+
+
+
 @api.route("/login", methods=["POST"])
+
 def login():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
     user = User.query.filter_by(email=email).first()
     if user is None or user.password != password:
-        return jsonify({"msg": "Bad username or password"}), 401
+        return jsonify({"msg": "Bad email or password"}), 401
 
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
+
+
+
+@api.route("/signup", methods=["POST"])
+def signup():
+    body = request.json  # Obtenemos el cuerpo completo de la solicitud JSON
+    
+    # Verificamos que los campos 'email' y 'password' estén presentes en el cuerpo de la solicitud
+    if "email" not in body or "password" not in body:
+        return jsonify({"msg": "Missing email or password"}), 400
+
+    # Verificamos si ya existe un usuario con el mismo email
+    if User.query.filter_by(email=body["email"]).first() is not None:
+        return jsonify({"msg": "User already exists"}), 400
+
+    # Creamos un nuevo usuario con los datos proporcionados
+    new_user = User(email=body["email"], password=body["password"], is_active=True)
+    
+    # Agregamos el nuevo usuario a la base de datos y confirmamos los cambios
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"msg": "User created successfully"}), 201
+
+
+         
