@@ -13,13 +13,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
+
+			login: (email,password) => {
+			
+				const requestOptions = {  
+					method: 'POST',
+					headers: {'Content-Type': 'application/json'},
+					body: JSON.stringify(
+					  {
+						"email": email,
+						"password": password
+					  }
+					)
+				  };
+			  
+				  fetch(process.env.BACKEND_URL +'/api/login', requestOptions)
+					.then((response) => response.json())
+					.then((data) => console.log(data));
+				},
 
 			getMessage: async () => {
 				try{
