@@ -3,15 +3,17 @@ import { Context } from "../store/appContext";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 import { Form } from "../component/Form";
+import { Navigate } from "react-router-dom";
 
 export const Home = () => {
 	const {store,action} = useContext(Context)
+	console.log('se cargo home')
 	
 	return (
 	  <div>
-		{store.auth == true ?'estas logueado' :'no etas loguead' }
-		<h1>formulario de home con un comopnente form importado</h1>
-		<Form /> 
+		<h1> homee</h1>
+		{store.auth == true ? <Navigate to={"/demo"}/> :<Form /> }
+		
 	  </div>
 	);
   };
