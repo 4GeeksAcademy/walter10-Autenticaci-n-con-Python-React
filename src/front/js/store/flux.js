@@ -1,3 +1,5 @@
+import { bool } from "prop-types";
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -14,6 +16,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			],
+			auth: false
 			
 		},
 		actions: {
@@ -36,9 +39,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  };
 			  
 				  fetch(process.env.BACKEND_URL +'/api/login', requestOptions)
-					.then((response) => response.json())
-					.then((data) => console.log(data));
-				},
+					.then((response) => {
+						console.log(response.status)
+						 if(response.status == 200){
+							setStore( {auth: true})
+
+						 }
+						return response.json()})
+					.then((data) => {
+						localStorage.setItem("token", data.access_token);
+						console.log(data)});
+					},
+						
 
 			getMessage: async () => {
 				try{
