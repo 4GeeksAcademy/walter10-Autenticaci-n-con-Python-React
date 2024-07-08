@@ -1,20 +1,20 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
-import rigoImageUrl from "../../img/rigo-baby.jpg";
-import "../../styles/home.css";
 import { Form } from "../component/Form";
 import { Navigate } from "react-router-dom";
+import { FormSignup } from "../component/FormSignup";
 
 export const Home = () => {
-	const {store,action} = useContext(Context)
-	console.log('se cargo home')
-	
-	return (
-	  <div>
-		<h1> homee</h1>
-		{store.auth == true ? <Navigate to={"/demo"}/> :<Form /> }
-		
-	  </div>
-	);
+  const { store, actions } = useContext(Context);
+
+  const handleLoginAttempt = async (email, password) => {
+    await actions.login(email, password);
   };
-  
+
+  return (
+    <div className="container">
+      {store.auth ? <Navigate to="/demo" /> : <Form onLoginAttempt={handleLoginAttempt} />}
+      
+    </div>
+  );
+};
