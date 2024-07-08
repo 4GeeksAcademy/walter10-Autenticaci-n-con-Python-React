@@ -40,7 +40,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ auth: false });
 						return false; // Login failed
 					}
-				} catch (error) {
+				} catch (error) {  
 					console.error("Login error:", error);
 					setStore({ auth: false });
 					return false; // Login failed
@@ -55,7 +55,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			logout: () => {
-				console.log('logout desde flux');
+				
 				localStorage.removeItem("token");
 				setStore({ auth: false });
 			},
